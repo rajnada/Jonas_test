@@ -1,9 +1,10 @@
-﻿using System;
- 
+﻿
+using System;
 
-namespace DataAccessLayer.Model.Models
+
+namespace BusinessLayer.Model.Models
 {
-    public class Employee : DataEntity
+    public class EmployInfo : BaseInfo
     {
         public string EmployeeCode { get; set; }
         public string EmployeeName { get; set; }
@@ -14,3 +15,4 @@ namespace DataAccessLayer.Model.Models
         public DateTime LastModified { get; set; }
     }
 }
+

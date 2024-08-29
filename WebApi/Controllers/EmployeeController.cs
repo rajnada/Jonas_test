@@ -2,8 +2,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
+using AutoMapper.Configuration.Conventions;
 using BusinessLayer.Model.Interfaces;
+using BusinessLayer.Model.Models;
+using DataAccessLayer.Model.Interfaces;
 using DataAccessLayer.Model.Models;
+using Ninject;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -12,11 +16,13 @@ namespace WebApi.Controllers
     {
         private readonly IEmployeeService _employeeService;
         private readonly IMapper _mapper;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public EmployeeController(IEmployeeService employeeService, IMapper mapper)
+        public EmployeeController(IEmployeeService employeeService, IMapper mapper, IEmployeeRepository employeeRepository)
         {
             _employeeService = employeeService;
             _mapper = mapper;
+            _employeeRepository = employeeRepository;
         }
 
         // GET api/employee
@@ -40,9 +46,10 @@ namespace WebApi.Controllers
             {
                 return BadRequest("Employee data cannot be null.");
             }
-
-            var employee = _mapper.Map<Employee>(employeeDto);
-            var result = await _employeeService.SaveEmployeeAsync(employee);
+            
+            var employeeInfo = _mapper.Map<EmployInfo>(employeeDto);
+            var employee = _mapper.Map<Employee>(employeeInfo);
+            var result = await _employeeRepository.SaveEmployeeAsync(employee);
 
             if (!result)
             {
@@ -55,7 +62,7 @@ namespace WebApi.Controllers
         // DELETE api/employee/5
         public async Task<IHttpActionResult> Delete(string employeeCode)
         {
-            var result = await _employeeService.DeleteEmployeeAsync(employeeCode);
+            var result = await _employeeRepository.DeleteEmployeeAsync(employeeCode);
 
             if (!result)
             {

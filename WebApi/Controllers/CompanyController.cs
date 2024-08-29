@@ -43,7 +43,7 @@ namespace WebApi.Controllers
             {
                 return BadRequest("Company data cannot be null.");
             }
-
+            
             var company = _mapper.Map<Company>(companyDto);
             var result = await _companyRepository.SaveCompany(company);
 
